@@ -2,7 +2,7 @@ package com.github.codeninja0101.user_identity_service.UserServiceImplTest;
 
 import com.github.codeninja0101.user_identity_service.model.UserEntity;
 import com.github.codeninja0101.user_identity_service.repository.UserRepository;
-import com.github.codeninja0101.user_identity_service.service.userServiceImpl.UserServiceImpl;
+import com.github.codeninja0101.user_identity_service.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

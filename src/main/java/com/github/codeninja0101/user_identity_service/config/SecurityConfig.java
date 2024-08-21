@@ -17,10 +17,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated()
+        http.authorizeHttpRequests(
+                auth -> auth.requestMatchers("/api/auth/signup", "/api/auth/login", "/api/auth/forgot_password")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .httpBasic(withDefaults());
 
