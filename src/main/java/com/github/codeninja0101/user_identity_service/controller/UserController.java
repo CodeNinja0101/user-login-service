@@ -1,7 +1,7 @@
 package com.github.codeninja0101.user_identity_service.controller;
 
 import com.github.codeninja0101.user_identity_service.model.UserEntity;
-import com.github.codeninja0101.user_identity_service.service.userService.UserService;
+import com.github.codeninja0101.user_identity_service.service.UserService;
 import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/auth")
 public class UserController {
+
     @Autowired
     private UserService userService;
 

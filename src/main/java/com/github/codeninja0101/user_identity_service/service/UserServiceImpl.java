@@ -1,15 +1,19 @@
-package com.github.codeninja0101.user_identity_service.service.userServiceImpl;
+package com.github.codeninja0101.user_identity_service.service;
 
 import com.github.codeninja0101.user_identity_service.model.UserEntity;
 import com.github.codeninja0101.user_identity_service.repository.UserRepository;
-import com.github.codeninja0101.user_identity_service.service.userService.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class UserServiceImpl implements UserService {
 
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override

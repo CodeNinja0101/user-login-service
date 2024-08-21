@@ -1,4 +1,4 @@
-package com.github.codeninja0101.user_identity_service.service.userService;
+package com.github.codeninja0101.user_identity_service.service;
 
 import com.github.codeninja0101.user_identity_service.model.UserEntity;
 
