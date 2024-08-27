@@ -1,26 +1,30 @@
 package com.github.codeninja0101.user_identity_service.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "users")
-public class UserEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserModel {
+
+
     private Long id;
 
+    @NotNull
+    @NotBlank
     private String username;
 
+    @NotNull
+    @NotBlank
     private String password;
 
-    public UserEntity() {
+    public UserModel() {
     }
 
-    public UserEntity(String username, String password, Long id) {
+    public UserModel(Long id, String username, String password) {
+        this.id = id;
         this.username = username;
         this.password = password;
-        this.id = id;
     }
 
     public Long getId() {
