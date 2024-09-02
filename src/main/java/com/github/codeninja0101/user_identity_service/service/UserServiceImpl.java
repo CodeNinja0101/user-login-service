@@ -1,8 +1,13 @@
 package com.github.codeninja0101.user_identity_service.service;
 
-import com.github.codeninja0101.user_identity_service.model.UserEntity;
+import com.github.codeninja0101.user_identity_service.util.PasswordUtil;
+import com.github.codeninja0101.user_identity_service.dto.UserDTO;
+import com.github.codeninja0101.user_identity_service.model.UserModel;
 import com.github.codeninja0101.user_identity_service.repository.UserRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,35 +18,47 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+//    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
-    public UserEntity saveUser(UserEntity userEntity) {
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        return userRepository.save(userEntity);
+    public UserDTO registerUser(UserModel userModel) {
+        if (userRepository.findByUsername(userModel.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("User already exists");
+        }
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(userModel, userDTO);
+        userDTO.setPassword(PasswordUtil.encodePassword(userModel.getPassword()));
+        return userRepository.save(userDTO);
     }
 
     @Override
-    public Optional<UserEntity> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<UserModel> findByUsername(String username) {
+        Optional<UserDTO> userDTO = userRepository.findByUsername(username);
+        if (userDTO.isPresent()) {
+            UserModel userModel = new UserModel();
+            BeanUtils.copyProperties(userDTO.get(), userModel);
+            return Optional.of(userModel);
+        }
+        return Optional.empty();
     }
 
     @Override
     public boolean validateUser(String username, String password) {
-        Optional<UserEntity> userEntity = findByUsername(username);
-        return userEntity.isPresent() && passwordEncoder.matches(password, userEntity.get().getPassword());
+        Optional<UserDTO> userDTO = userRepository.findByUsername(username);
+        return userDTO.isPresent() && PasswordUtil.matchPassword(password, userDTO.get().getPassword());
     }
 
     @Override
     public void resetPassword(String username, String newPassword) {
-        Optional<UserEntity> userEntity = findByUsername(username);
-        if (userEntity.isPresent()) {
-            UserEntity existingUser = userEntity.get();
-            existingUser.setPassword(passwordEncoder.encode(newPassword));
+        Optional<UserDTO> userDTO = userRepository.findByUsername(username);
+        if (userDTO.isPresent()) {
+            UserDTO existingUser = userDTO.get();
+            existingUser.setPassword(PasswordUtil.encodePassword(newPassword));
             userRepository.save(existingUser);
         } else {
-            System.out.println(username + ": User is Not Present");
+            throw new IllegalArgumentException("Username not found");
         }
     }
+
 }
